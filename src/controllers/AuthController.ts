@@ -32,7 +32,7 @@ class AuthController {
         id: findUser.id,
       };
 
-      const token = jwt.sign(JWTPayload, process.env.JWT_SECRET || "123", {
+      const token = jwt.sign(JWTPayload, process.env.JWT_SECRET!, {
         expiresIn: "365d",
       });
 
