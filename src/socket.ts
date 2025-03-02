@@ -1,9 +1,9 @@
 import { Server, Socket } from "socket.io";
+import { produceMessage } from "./helper";
 
 interface CustomSocket extends Socket {
   room?: string;
 }
-
 export function setupSocket(io: Server) {
   io.use((socket: CustomSocket, next) => {
     const room = socket.handshake.auth.room || socket.handshake.headers.room;
@@ -14,16 +14,20 @@ export function setupSocket(io: Server) {
     next();
   });
 
-  io.on("connection", (socket) => {
-    console.log("The socket connected..", socket.id);
+  io.on("connection", (socket: CustomSocket) => {
+    socket.join(socket.room!);
 
-    socket.on("message", (data) => {
-      console.log("Server message", data);
-      socket.broadcast.emit("message", data);
+    socket.on("message", async (data) => {
+      try {
+        await produceMessage("chats", data);
+      } catch (error) {
+        console.log("The kafka produce error is", error);
+      }
+      socket.to(socket.room!).emit("message", data);
     });
 
     socket.on("disconnect", () => {
-      console.log("A user disconnected", socket.id);
+      console.log("A user disconnected:", socket.id);
     });
   });
 }

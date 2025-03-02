@@ -8,6 +8,8 @@ import { setupSocket } from "./socket";
 import { createAdapter } from "@socket.io/redis-streams-adapter";
 import redis from "./config/redis";
 import { instrument } from "@socket.io/admin-ui";
+import { consumeMessages } from "./helper";
+import { connectKafkaProducer } from "./config/kafka.config";
 
 dotenv.config();
 
@@ -43,6 +45,13 @@ app.get("/", (req: Request, res: Response) => {
 
 // * Routes
 app.use("/api", router);
+
+// * Add Kafka Producer
+connectKafkaProducer().catch((err) => console.log("Kafka Consumer error", err));
+
+consumeMessages(process.env.KAFKA_TOPIC!).catch((err) =>
+  console.log("The Kafka Consume error", err)
+);
 
 server.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
