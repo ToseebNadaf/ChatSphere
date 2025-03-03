@@ -72,7 +72,7 @@ The server will be running at `http://localhost:3000`.
 
 Explore the APIs using the following endpoints:
 
-### Base URL - 
+#### Base URL - 
   ```
   http://localhost:3000/api
   ```
