@@ -1,4 +1,4 @@
-# ChatSphere
+# ChatSphere - Real-Time Chat Application
 
 **ChatSphere** is a robust, real-time chat application backend designed to facilitate seamless communication. Built with Node.js and TypeScript, it leverages Socket.io for real-time messaging, Kafka for reliable message brokering, and Postgres for efficient message storage and retrieval. This project is perfect for developers looking to understand or build scalable chat applications with modern technologies.
 
